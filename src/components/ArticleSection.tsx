@@ -4,9 +4,7 @@ import SearchIcon from "@/assets/Search_light.svg";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
