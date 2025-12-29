@@ -1,7 +1,9 @@
 import './App.css'
-import { HeroSection } from './components/HeroSection'
-<link href="/src/style.css" rel="stylesheet"></link>
 import { NavBar } from './components/NavBar'
+import { HeroSection } from './components/HeroSection'
+import Footer from './components/Footer';
+<link href="/src/style.css" rel="stylesheet"></link>
+
 
 
 function App() {
@@ -9,6 +11,7 @@ function App() {
     <>
       <NavBar />
       <HeroSection />
+      <Footer />
     </>
   )
 }
