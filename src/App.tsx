@@ -2,6 +2,7 @@ import './App.css'
 import { NavBar } from './components/NavBar'
 import { HeroSection } from './components/HeroSection'
 import Footer from './components/Footer';
+import ArticleSection from './components/ArticleSection';
 <link href="/src/style.css" rel="stylesheet"></link>
 
 
@@ -11,6 +12,7 @@ function App() {
     <>
       <NavBar />
       <HeroSection />
+      <ArticleSection />
       <Footer />
     </>
   )
