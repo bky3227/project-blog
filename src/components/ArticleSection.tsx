@@ -1,6 +1,5 @@
 import { Input } from "@/components/ui/input";
 import SearchIcon from "@/assets/Search_light.svg";
-
 import {
   Select,
   SelectContent,
@@ -8,6 +7,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import BlogCard from "@/components/BlogCard";
+import {blogPosts} from "@/data/blogPosts";
 
 function ArticleSection() {
   return (
@@ -67,7 +68,7 @@ function ArticleSection() {
               <SelectTrigger className="w-full !h-auto pl-4 pr-3 py-3 border bg-white border-brown-300 rounded-lg text-body-1 text-brown-400 data-[placeholder]:text-brown-400 focus:outline-none focus:ring-1 focus:ring-brown-400">
                 <SelectValue placeholder="Theme" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper">
                 <SelectItem value="Hightlight">Hightlight</SelectItem>
                 <SelectItem value="Cat">Cat</SelectItem>
                 <SelectItem value="Inspiration">Inspiration</SelectItem>
@@ -76,6 +77,30 @@ function ArticleSection() {
             </Select>
           </div>
         </div>
+        <section
+      className="
+        grid
+        grid-cols-1
+        md:grid-cols-2
+        gap-6
+        max-w-5xl
+        mx-auto
+        py-4
+        px-4
+      "
+    >
+      {blogPosts.map((post) => (
+        <BlogCard
+          key={post.id}
+          image={post.image}
+          category={post.category}
+          title={post.title}
+          description={post.description}
+          author={post.author}
+          date={post.date}
+        />
+      ))}
+    </section>
       </div>
     </div>
   );
