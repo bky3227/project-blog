@@ -1,5 +1,12 @@
 import logo from '../assets/logo.svg';
 import hamburger from '../assets/hamburger.svg';
+import {
+    DropdownMenu,
+    DropdownMenuTrigger,
+    DropdownMenuContent,
+    DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+
 
 export function NavBar() {
     return (
@@ -16,9 +23,55 @@ export function NavBar() {
                         Sign up
                     </button>
                 </div>
-                <button className="md:hidden">
-                    <img src={hamburger} alt="hamburger" className="w-[24px] h-[24px]"/>
-                </button>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <button className="md:hidden p-2">
+                            <img
+                                src={hamburger}
+                                alt="hamburger"
+                                className="w-[24px] h-[24px]"
+                            />
+                        </button>
+                    </DropdownMenuTrigger>
+
+                    <DropdownMenuContent
+                        align="end"
+                        className="w-[320px] md:hidden p-6 rounded-3xl bg-white"
+                    >
+
+                        <DropdownMenuItem
+                            className="
+                            w-full
+                            h-[56px]
+                            rounded-full
+                            border border-black
+                            flex items-center justify-center
+                            text-base text-black
+                            cursor-pointer
+                            focus:bg-transparent
+                        "
+                        >
+                            Log in
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                            className="
+                            w-full
+                            h-[56px]
+                            mt-4
+                            rounded-full
+                            bg-black
+                            flex items-center justify-center
+                            text-base text-white
+                            cursor-pointer
+                            focus:bg-black
+                        "
+                        >
+                            Sign up
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+
             </div>
         </nav>
     )
