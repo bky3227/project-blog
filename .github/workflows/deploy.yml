@@ -37,8 +37,8 @@ jobs:
       - name: Sync files to server
         uses: burnett01/rsync-deployments@7.0.1
         with:
-          switches: -avzr --delete
-          path: dist/
+          switches: -avzr --delete --exclude 'node_modules' --exclude '.git'
+          path: ./
           remote_path: /var/www/blog/
           remote_host: ${{ secrets.SERVER_HOST }}
           remote_user: ${{ secrets.SERVER_USERNAME }}
@@ -54,7 +54,7 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             cd /var/www/blog
-            npm ci --omit=dev
+            npm install --omit=dev
 
       - name: Restart PM2
         uses: appleboy/ssh-action@v1.0.3
