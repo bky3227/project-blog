@@ -32,20 +32,20 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
-            cd ${{ secrets.DEPLOY_PATH }}
-            
+            cd /var/www/blog
+
             # Pull latest changes
             git fetch origin main
             git reset --hard origin/main
-            
+
             # Install dependencies
             npm ci --production
-            
+
             # Build project
             npm run build
-            
+
             # Restart pm2 process
             pm2 restart blog
-            
+
             # Save pm2 process list
             pm2 save
