@@ -35,7 +35,8 @@ jobs:
             cd ${{ secrets.DEPLOY_PATH }}
             
             # Pull latest changes
-            git pull origin main
+            git fetch origin main
+            git reset --hard origin/main
             
             # Install dependencies
             npm ci --production
@@ -43,6 +44,8 @@ jobs:
             # Build project
             npm run build
             
-            # Restart/reload pm2 process
-            pm2 restart blog || pm2 start ecosystem.config.js
+            # Restart pm2 process
+            pm2 restart blog
+            
+            # Save pm2 process list
             pm2 save
