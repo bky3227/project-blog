@@ -1,3 +1,5 @@
+import { useBlogPosts } from "@/hook/useBlogPosts";
+import { type BlogPost } from "@/types/blog";
 import { Input } from "@/components/ui/input";
 import SearchIcon from "@/assets/Search_light.svg";
 import {
@@ -8,13 +10,53 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import BlogCard from "@/components/BlogCard";
-import { blogPosts } from "@/data/blogPosts";
 import { useState } from "react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 function ArticleSection() {
-
   const categories = ["Highlight", "Cat", "Inspiration", "General"];
   const [selectedCategory, setSelectedCategory] = useState("Highlight");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState(searchTerm);
+  const [suggestions, setSuggestions] = useState<BlogPost[]>([]);
+  const [showSuggestion, setShowSuggestion] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!debouncedSearch) {
+      setSuggestions([]);
+      setShowSuggestion(false);
+      return;
+    }
+
+    const fetchSuggestions = async () => {
+      const res = await fetch(
+        `https://blog-post-project-api.vercel.app/posts?keyword=${debouncedSearch}&limit=5`
+      );
+      const data: BlogPost[] = await res.json();
+      setSuggestions(data);
+      setShowSuggestion(true);
+    };
+
+    fetchSuggestions();
+  }, [debouncedSearch]);
+
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  const { posts, isLoading, hasMore, loadMore } =
+    useBlogPosts(selectedCategory, debouncedSearch);
+
+
+
 
   return (
     <div className="w-full flex flex-col mx-auto xl:max-w-[1200px] py-[120px]">
@@ -48,10 +90,12 @@ function ArticleSection() {
             </ul>
           </nav>
 
-          <div className="w-full pl-4 pr-3 py-3 bg-white border border-brown-300 rounded-lg flex flex-row gap-1 xl:max-w-[360px]">
+          <div className="relative w-full pl-4 pr-3 py-3 bg-white border border-brown-300 rounded-lg flex flex-row gap-1 xl:max-w-[360px]">
             <Input
-              type="search"
+              type="text"
               placeholder="Search"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="
                 placeholder:text-body-1
                 placeholder:text-brown-400
@@ -63,7 +107,32 @@ function ArticleSection() {
                 focus-visible:ring-0
                 focus-visible:outline-none
                 xl:max-w-[304px]"
+              onFocus={() => {
+                if (suggestions.length > 0) {
+                  setShowSuggestion(true);
+                }
+              }}
+
+              onBlur={() => {
+                setTimeout(() => {
+                  setShowSuggestion(false);
+                }, 150);
+              }}
             />
+            {showSuggestion && suggestions.length > 0 && (
+              <ul className="absolute top-full mt-2 right-0 w-full bg-white rounded-lg shadow-lg z-50">
+                {suggestions.map((post) => (
+                  <li
+                    key={post.id}
+                    onClick={() => navigate(`/post/${post.id}`)}
+                    className="px-4 py-2 cursor-pointer hover:bg-brown-100"
+                  >
+                    {post.title}
+                  </li>
+                ))}
+              </ul>
+            )}
+
             <img src={SearchIcon} alt="search-icon" />
           </div>
           <div className="w-full flex flex-col gap-1 xl:hidden">
@@ -123,9 +192,10 @@ function ArticleSection() {
           py-4
           px-4
           ">
-          {blogPosts.map((post) => (
+          {posts.map((post) => (
             <BlogCard
               key={post.id}
+              id={post.id}
               image={post.image}
               category={post.category}
               title={post.title}
@@ -135,7 +205,18 @@ function ArticleSection() {
             />
           ))}
         </section>
-        <button className="text-body-1 text-brown-600 underline">View more</button>
+        {hasMore && (
+          <div className="text-center mt-8">
+            <button
+              onClick={loadMore}
+              className="text-body-1 text-brown-600 underline"
+              disabled={isLoading}
+            >
+              {isLoading ? "Loading..." : "View more"}
+            </button>
+          </div>
+        )}
+
       </div>
     </div>
   );
