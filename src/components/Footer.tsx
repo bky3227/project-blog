@@ -1,4 +1,6 @@
 import { Linkedin, Github, Mail } from 'lucide-react';
+import { Link } from "react-router-dom";
+
 
 function Footer() {
   return (
@@ -29,12 +31,12 @@ function Footer() {
         </div>
 
         {/* Home page */}
-        <a
-          href="#"
+        <Link
+          to="/"
           className="text-body-1 text-brown-600 underline"
         >
           Home page
-        </a>
+        </Link>
       </div>
     </footer>
   );
