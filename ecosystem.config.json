@@ -1,0 +1,14 @@
+{
+  "apps": [
+    {
+      "name": "blog",
+      "script": "npm",
+      "args": "run preview",
+      "cwd": "/var/www/blog",
+      "env": {
+        "NODE_ENV": "production",
+        "PORT": "3000"
+      }
+    }
+  ]
+}
